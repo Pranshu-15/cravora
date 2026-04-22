@@ -3,11 +3,9 @@ import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdDeliveryDining, MdStar } from "react-icons/md";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from "axios"
 import { serverUrl } from '../App';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../../firebase';
 import { ClipLoader } from 'react-spinners';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
@@ -20,6 +18,10 @@ function SignIn() {
     const [err, setErr] = useState("")
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+    const [searchParams] = useSearchParams()
+    React.useEffect(() => {
+        if (searchParams.get('error') === 'google_failed') setErr('Google Sign In failed. Please try again.')
+    }, [])
 
     const handleSignIn = async () => {
         setLoading(true)
@@ -36,21 +38,8 @@ function SignIn() {
         }
     }
 
-    const handleGoogleAuth = async () => {
-        try {
-            const provider = new GoogleAuthProvider()
-            const result = await signInWithPopup(auth, provider)
-            const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
-                email: result.user.email,
-                fullName: result.user.displayName,
-                role: "user",
-                mobile: "0000000000"
-            }, { withCredentials: true })
-            dispatch(setUserData(data))
-        } catch (error) {
-            setErr(error?.response?.data?.message || error.message || "Google Sign In Failed.")
-            console.log(error)
-        }
+    const handleGoogleAuth = () => {
+        window.location.href = `${serverUrl}/api/auth/google-login`
     }
 
     return (

@@ -6,8 +6,6 @@ import { MdDeliveryDining } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 import { serverUrl } from '../App';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../../firebase';
 import { ClipLoader } from "react-spinners"
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
@@ -45,22 +43,8 @@ function SignUp() {
         }
     }
 
-    const handleGoogleAuth = async () => {
-        if (!mobile) return setErr("Mobile number is required")
-        try {
-            const provider = new GoogleAuthProvider()
-            const result = await signInWithPopup(auth, provider)
-            const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
-                fullName: result.user.displayName,
-                email: result.user.email,
-                role,
-                mobile
-            }, { withCredentials: true })
-            dispatch(setUserData(data))
-        } catch (error) {
-            setErr(error?.response?.data?.message || error.message || "Google Sign Up Failed.")
-            console.log(error)
-        }
+    const handleGoogleAuth = () => {
+        window.location.href = `${serverUrl}/api/auth/google-login`
     }
 
     return (
