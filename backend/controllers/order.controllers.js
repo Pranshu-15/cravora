@@ -4,11 +4,8 @@ import Shop from "../models/shop.model.js"
 import User from "../models/user.model.js"
 import { sendDeliveryOtpMail } from "../utils/mail.js"
 import RazorPay from "razorpay"
-import dotenv from "dotenv"
-import { count } from "console"
 
-dotenv.config()
-let instance = new RazorPay({
+const getRazorpay = () => new RazorPay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
@@ -55,6 +52,7 @@ export const placeOrder = async (req, res) => {
         ))
 
         if (paymentMethod == "online") {
+            const instance = getRazorpay()
             const razorOrder = await instance.orders.create({
                 amount: Math.round(totalAmount * 100),
                 currency: 'INR',
@@ -120,6 +118,7 @@ export const placeOrder = async (req, res) => {
 export const verifyPayment = async (req, res) => {
     try {
         const { razorpay_payment_id, orderId } = req.body
+        const instance = getRazorpay()
         const payment = await instance.payments.fetch(razorpay_payment_id)
         if (!payment || payment.status != "captured") {
             return res.status(400).json({ message: "payment not captured" })
