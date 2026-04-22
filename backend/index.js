@@ -16,11 +16,16 @@ import { socketHandler } from "./socket.js"
 const app=express()
 const server=http.createServer(app)
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    process.env.FRONTEND_URL || "https://cravora-0f4t.onrender.com"
+]
+
 const io=new Server(server,{
    cors:{
-    origin:"http://localhost:5173",
+    origin: allowedOrigins,
     credentials:true,
-    methods:['POST','GET']
+    methods:['POST','GET','PUT','DELETE','PATCH']
 }
 })
 
@@ -28,9 +33,9 @@ app.set("io",io)
 
 
 
-const port=process.env.PORT || 5000
+const port=process.env.PORT || 8000
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin: allowedOrigins,
     credentials:true
 }))
 app.use(express.json())

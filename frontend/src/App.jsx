@@ -27,7 +27,7 @@ import { setSocket } from './redux/userSlice'
 
 import { ClipLoader } from 'react-spinners'
 
-export const serverUrl="http://localhost:8000"
+export const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:8000"
 function App() {
     const {userData, isAuthLoading}=useSelector(state=>state.user)
     const dispatch=useDispatch()
