@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://img-icons.macappstore.org/246607c08d957ba4b38343e8c89ceba2e4e135cf" width="100" height="100" alt="Cravora Logo" />
+  <img src="https://img.icons8.com/fluency/256/hamburger.png" width="100" height="100" alt="Cravora Logo" />
   <h1>🍔 Cravora - The Ultimate Food Delivery Platform</h1>
   <p>A full-stack, real-time, multi-role MERN application tailored for Customers, Restaurant Owners, and Delivery Partners.</p>
 </div>
